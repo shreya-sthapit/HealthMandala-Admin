@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Status Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .approved {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .pending {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        .not-registered {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: white;
+        }
+        .status-approved { background: #28a745; }
+        .status-pending { background: #ffc107; color: #212529; }
+        .status-not-registered { background: #dc3545; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #6c757d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 User Profile Status Test</h1>
+        <p>This page tests the connection to your admin backend to check profile approval status.</p>
+        
+        <div class="test-section">
+            <h3>Test Your Email</h3>
+            <input type="email" id="emailInput" placeholder="Enter your email" value="sthapitshreya@gmail.com" style="width: 300px; padding: 8px;">
+            <button onclick="checkProfile()">Check Profile Status</button>
+        </div>
+        
+        <div id="result" class="test-section" style="display: none;">
+            <h3>Profile Status Result</h3>
+            <div id="profileDisplay"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Quick Tests</h3>
+            <button onclick="testKnownDoctor()">Test Known Doctor</button>
+            <button onclick="testKnownPatient()">Test Known Patient</button>
+            <button onclick="testNonExistent()">Test Non-Existent User</button>
+        </div>
+        
+        <div id="debugInfo" class="test-section">
+            <h3>Debug Information</h3>
+            <p><strong>Admin Backend URL:</strong> http://localhost:9000</p>
+            <p><strong>Test Endpoint:</strong> /api/user/profile-status/{email}</p>
+            <p><strong>Expected Response:</strong> JSON with registration status</p>
+        </div>
+    </div>
+
+    <script>
+        async function checkProfile() {
+            const email = document.getElementById('emailInput').value;
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+            
+            try {
+                console.log('Checking profile for:', email);
+                const response = await fetch(`http://localhost:9000/api/user/profile-status/${email}`);
+                const data = await response.json();
+                
+                console.log('Profile data:', data);
+                displayResult(data, email);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                displayError(error.message);
+            }
+        }
+        
+        function displayResult(data, email) {
+            const resultDiv = document.getElementById('result');
+            const profileDiv = document.getElementById('profileDisplay');
+            
+            let statusClass = '';
+            let statusText = '';
+            let message = '';
+            
+            if (data.registered && data.status === 'approved') {
+                statusClass = 'approved';
+                statusText = 'Approved';
+                message = '✅ Profile is approved and verified!';
+            } else if (data.registered && data.status === 'pending') {
+                statusClass = 'pending';
+                statusText = 'Pending';
+                message = '⏳ Profile is under review by admin.';
+            } else {
+                statusClass = 'not-registered';
+                statusText = 'Not Registered';
+                message = '❌ Profile not found. Please complete registration.';
+            }
+            
+            let profileHtml = `
+                <div class="${statusClass}">
+                    <h4>${message}</h4>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${statusClass}">${statusText}</span></p>
+                    <p><strong>Registered:</strong> ${data.registered ? 'Yes' : 'No'}</p>
+                    <p><strong>Type:</strong> ${data.type || 'N/A'}</p>
+                    <p><strong>Is Approved:</strong> ${data.isApproved ? 'Yes' : 'No'}</p>
+            `;
+            
+            if (data.profile) {
+                profileHtml += `
+                    <div class="profile-info">
+                        <div class="avatar">
+                            ${data.profile.firstName?.[0] || '?'}${data.profile.lastName?.[0] || '?'}
+                        </div>
+                        <div>
+                            <h5>${data.profile.firstName} ${data.profile.lastName}</h5>
+                            <p>ID: ${data.profile.id}</p>
+                            ${data.profile.specialization ? `<p>Specialization: ${data.profile.specialization}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            profileHtml += `
+                    <details>
+                        <summary>Raw JSON Response</summary>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                </div>
+            `;
+            
+            profileDiv.innerHTML = profileHtml;
+            resultDiv.style.display = 'block';
+        }
+        
+        function displayError(error) {
+            const resultDiv = document.getElementById('result');
+            const profileDiv = document.getElementById('profileDisplay');
+            
+            profileDiv.innerHTML = `
+                <div class="not-registered">
+                    <h4>❌ Connection Error</h4>
+                    <p><strong>Error:</strong> ${error}</p>
+                    <p><strong>Possible Issues:</strong></p>
+                    <ul>
+                        <li>Admin backend not running on port 9000</li>
+                        <li>CORS policy blocking the request</li>
+                        <li>Network connectivity issue</li>
+                    </ul>
+                    <p><strong>Solutions:</strong></p>
+                    <ul>
+                        <li>Make sure backend is running: <code>cd backend && npm start</code></li>
+                        <li>Check browser console for detailed errors</li>
+                        <li>Verify the backend URL is correct</li>
+                    </ul>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function testKnownDoctor() {
+            document.getElementById('emailInput').value = 'sthapitshreya@gmail.com';
+            checkProfile();
+        }
+        
+        function testKnownPatient() {
+            document.getElementById('emailInput').value = 'shreyasthapit224@gmail.com';
+            checkProfile();
+        }
+        
+        function testNonExistent() {
+            document.getElementById('emailInput').value = 'nonexistent@example.com';
+            checkProfile();
+        }
+        
+        // Auto-test on page load
+        window.onload = function() {
+            console.log('Page loaded. Testing connection...');
+            testKnownDoctor();
+        };
+    </script>
+</body>
+</html>
