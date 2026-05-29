@@ -10,8 +10,6 @@ const path = require('path');
 const app = express();
 const db = new MongoDB();
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Proxy endpoint for images from main backend
 app.get('/proxy-image/*', async (req, res) => {
