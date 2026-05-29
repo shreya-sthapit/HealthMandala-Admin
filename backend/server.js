@@ -10,6 +10,59 @@ const path = require('path');
 const app = express();
 const db = new MongoDB();
 
+function parseEmailAddress(value, fallbackEmail, fallbackName) {
+  const emailValue = value || `${fallbackName} <${fallbackEmail}>`;
+  const match = emailValue.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+
+  if (match) {
+    return {
+      name: match[1].replace(/^"|"$/g, '').trim() || fallbackName,
+      email: match[2].trim()
+    };
+  }
+
+  return {
+    name: fallbackName,
+    email: emailValue.trim() || fallbackEmail
+  };
+}
+
+async function sendBrevoEmail({ toEmail, toName, subject, htmlContent }) {
+  if (!process.env.BREVO_API_KEY) {
+    throw new Error('BREVO_API_KEY is not configured');
+  }
+
+  const fetch = (await import('node-fetch')).default;
+  const sender = parseEmailAddress(
+    process.env.EMAIL_FROM,
+    'info.healthmandala@gmail.com',
+    'HealthMandala'
+  );
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'api-key': process.env.BREVO_API_KEY,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      sender,
+      to: [{ email: toEmail, name: toName || toEmail }],
+      subject,
+      htmlContent
+    })
+  });
+
+  const responseText = await response.text();
+
+  if (!response.ok) {
+    throw new Error(`Brevo API ${response.status}: ${responseText}`);
+  }
+
+  return responseText ? JSON.parse(responseText) : {};
+}
+
 
 // Proxy endpoint for images from main backend
 app.get('/proxy-image/*', async (req, res) => {
@@ -933,17 +986,6 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
       if (hospital && !hospital.inviteEmailSent) {
         try {
           const jwt = require('jsonwebtoken');
-          const nodemailer = require('nodemailer');
-          
-          const transporter = nodemailer.createTransport({
-            host: 'smtp-relay.brevo.com',
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.BREVO_USER,
-              pass: process.env.BREVO_PASS
-            }
-          });
           
           const inviteToken = jwt.sign(
             {
@@ -958,11 +1000,11 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
           
           const setPasswordUrl = `${process.env.FRONTEND_URL || 'http://10.24.7.67:3000'}/hospital/set-password?token=${inviteToken}`;
           
-          await transporter.sendMail({
-            from: process.env.EMAIL_FROM || 'HealthMandala <info.healthmandala@gmail.com>',
-            to: hospital.officialEmail,
+          const emailResult = await sendBrevoEmail({
+            toEmail: hospital.officialEmail,
+            toName: hospital.adminName,
             subject: 'Welcome to HealthMandala!',
-            html: `
+            htmlContent: `
               <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:40px 24px;color:#1a1a1a;">
                 <h2 style="color:#00897b;font-size:1.4rem;margin:0 0 24px;">Welcome to HealthMandala!</h2>
                 <p style="margin:0 0 12px;">Dear <strong>${hospital.adminName}</strong>,</p>
@@ -994,7 +1036,7 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
             { $set: { inviteEmailSent: true } }
           );
           
-          console.log(`✅ Invite email sent to ${hospital.officialEmail}`);
+          console.log(`✅ Invite email sent to ${hospital.officialEmail}`, emailResult.messageId || '');
         } catch (emailErr) {
           console.error('❌ Invite email failed:', emailErr.message);
           // Don't block approval if email fails
@@ -1028,10 +1070,6 @@ async function startServer() {
       console.log(`\n📊 Admin Dashboard Backend Ready!`);
       console.log(`🔗 API Base URL: ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}`);
       console.log(`🔐 Admin Login: admin@gmail.com / admin123`);
-      console.log(`\n⚠️  IMPORTANT: Update your frontend to use port ${PORT}`);
-      console.log(`\n🔧 To update frontend, run these commands:`);
-      console.log(`   cd ../frontend/src`);
-      console.log(`   find . -name "*.js" -exec sed -i '' 's/localhost:[0-9]*/localhost:${PORT}/g' {} +`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
