@@ -936,10 +936,12 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
           const nodemailer = require('nodemailer');
           
           const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp-relay.brevo.com',
+            port: 587,
+            secure: false,
             auth: {
-              user: process.env.EMAIL_USER || 'info.healthmandala@gmail.com',
-              pass: process.env.EMAIL_PASS || 'nmno mxwe anlt yzpb'
+              user: process.env.BREVO_USER,
+              pass: process.env.BREVO_PASS
             }
           });
           
@@ -957,7 +959,7 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
           const setPasswordUrl = `${process.env.FRONTEND_URL || 'http://10.24.7.67:3000'}/hospital/set-password?token=${inviteToken}`;
           
           await transporter.sendMail({
-            from: 'HealthMandala <info.healthmandala@gmail.com>',
+            from: process.env.EMAIL_FROM || 'HealthMandala <info.healthmandala@gmail.com>',
             to: hospital.officialEmail,
             subject: 'Welcome to HealthMandala!',
             html: `
