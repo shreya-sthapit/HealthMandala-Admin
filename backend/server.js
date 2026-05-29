@@ -250,6 +250,93 @@ app.get('/api/admin/verify', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/api/hospital/invite/verify', async (req, res) => {
+  try {
+    if (!dbConnected) {
+      return res.status(500).json({ valid: false, message: 'Database connection error' });
+    }
+
+    const { token } = req.query;
+    if (!token) {
+      return res.status(400).json({ valid: false, message: 'Invite token is required' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { ObjectId } = require('mongodb');
+    const hospital = await db.db.collection('HospitalPartners').findOne({
+      _id: new ObjectId(decoded.hospitalId),
+      officialEmail: decoded.officialEmail
+    });
+
+    if (!hospital) {
+      return res.status(404).json({ valid: false, message: 'Hospital invite not found' });
+    }
+
+    res.json({
+      valid: true,
+      hospital: {
+        hospitalName: hospital.hospitalName,
+        adminName: hospital.adminName,
+        officialEmail: hospital.officialEmail,
+        passwordSet: Boolean(hospital.passwordSet)
+      }
+    });
+  } catch (error) {
+    const message = error.name === 'TokenExpiredError'
+      ? 'Invite link has expired'
+      : 'Invalid invite link';
+    res.status(400).json({ valid: false, message });
+  }
+});
+
+app.post('/api/hospital/set-password', async (req, res) => {
+  try {
+    if (!dbConnected) {
+      return res.status(500).json({ message: 'Database connection error' });
+    }
+
+    const { token, password } = req.body;
+    if (!token || !password) {
+      return res.status(400).json({ message: 'Token and password are required' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { ObjectId } = require('mongodb');
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await db.db.collection('HospitalPartners').updateOne(
+      {
+        _id: new ObjectId(decoded.hospitalId),
+        officialEmail: decoded.officialEmail,
+        status: 'approved'
+      },
+      {
+        $set: {
+          password: hashedPassword,
+          passwordSet: true,
+          inviteAcceptedAt: new Date(),
+          updatedAt: new Date()
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: 'Approved hospital invite not found' });
+    }
+
+    res.json({ message: 'Password set successfully' });
+  } catch (error) {
+    const message = error.name === 'TokenExpiredError'
+      ? 'Invite link has expired'
+      : 'Invalid invite link';
+    res.status(400).json({ message });
+  }
+});
+
 // Get dashboard statistics
 app.get('/api/admin/stats', authenticateToken, async (req, res) => {
   try {
@@ -989,7 +1076,7 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
           
           const inviteToken = jwt.sign(
             {
-              hospitalId: hospital._id,
+              hospitalId: hospital._id.toString(),
               hospitalName: hospital.hospitalName,
               adminName: hospital.adminName,
               officialEmail: hospital.officialEmail
@@ -998,7 +1085,11 @@ app.put('/api/admin/hospital/:id/approval', authenticateToken, async (req, res) 
             { expiresIn: '48h' }
           );
           
-          const setPasswordUrl = `${process.env.FRONTEND_URL || 'http://10.24.7.67:3000'}/hospital/set-password?token=${inviteToken}`;
+          const hospitalFrontendUrl = (
+            process.env.HOSPITAL_FRONTEND_URL ||
+            'https://healthmandala-frontend.vercel.app'
+          ).replace(/\/$/, '');
+          const setPasswordUrl = `${hospitalFrontendUrl}/hospital/set-password?token=${inviteToken}`;
           
           const emailResult = await sendBrevoEmail({
             toEmail: hospital.officialEmail,
