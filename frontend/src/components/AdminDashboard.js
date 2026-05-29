@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL, apiUrl } from '../config';
+import { apiUrl } from '../config';
 import './AdminDashboard.css';
 
 const AdminDashboard = ({ admin, onLogout }) => {
