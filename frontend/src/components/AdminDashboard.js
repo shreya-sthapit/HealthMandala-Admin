@@ -432,10 +432,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Profile Photo:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`} 
+                                  src={`${doctor.profilePhoto}`} 
                                   alt="Profile" 
                                   className="document-image profile-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`)}
+                                  onClick={() => setSelectedImage(`${doctor.profilePhoto}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -445,10 +445,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NMC Certificate:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`} 
+                                  src={`${doctor.nmcCertificateImage}`} 
                                   alt="NMC Certificate" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`)}
+                                  onClick={() => setSelectedImage(`${doctor.nmcCertificateImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -458,10 +458,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Degree Certificate:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`} 
+                                  src={`${doctor.degreeCertificateImage}`} 
                                   alt="Degree Certificate" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`)}
+                                  onClick={() => setSelectedImage(`${doctor.degreeCertificateImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -471,10 +471,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Front:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`} 
+                                  src={`${doctor.nidFrontImage}`} 
                                   alt="NID Front" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`)}
+                                  onClick={() => setSelectedImage(`${doctor.nidFrontImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -484,10 +484,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Back:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`} 
+                                  src={`${doctor.nidBackImage}`} 
                                   alt="NID Back" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`)}
+                                  onClick={() => setSelectedImage(`${doctor.nidBackImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -605,10 +605,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Profile Photo:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`} 
+                                      src={`${doctor.profilePhoto}`} 
                                       alt="Profile" 
                                       className="document-image profile-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`)}
+                                      onClick={() => setSelectedImage(`${doctor.profilePhoto}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -618,10 +618,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NMC Certificate:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`} 
+                                      src={`${doctor.nmcCertificateImage}`} 
                                       alt="NMC Certificate" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`)}
+                                      onClick={() => setSelectedImage(`${doctor.nmcCertificateImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -631,10 +631,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Degree Certificate:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`} 
+                                      src={`${doctor.degreeCertificateImage}`} 
                                       alt="Degree Certificate" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`)}
+                                      onClick={() => setSelectedImage(`${doctor.degreeCertificateImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -644,10 +644,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Front:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`} 
+                                      src={`${doctor.nidFrontImage}`} 
                                       alt="NID Front" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`)}
+                                      onClick={() => setSelectedImage(`${doctor.nidFrontImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -657,10 +657,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Back:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`} 
+                                      src={`${doctor.nidBackImage}`} 
                                       alt="NID Back" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`)}
+                                      onClick={() => setSelectedImage(`${doctor.nidBackImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -764,10 +764,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Profile Photo:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`} 
+                                  src={`${patient.profilePhoto}`} 
                                   alt="Profile" 
                                   className="document-image profile-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`)}
+                                  onClick={() => setSelectedImage(`${patient.profilePhoto}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -777,10 +777,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Front:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`} 
+                                  src={`${patient.nidFrontImage}`} 
                                   alt="NID Front" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`)}
+                                  onClick={() => setSelectedImage(`${patient.nidFrontImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -790,10 +790,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Back:</strong></p>
                                 <img 
-                                  src={`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`} 
+                                  src={`${patient.nidBackImage}`} 
                                   alt="NID Back" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`)}
+                                  onClick={() => setSelectedImage(`${patient.nidBackImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -894,10 +894,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Profile Photo:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`} 
+                                      src={`${patient.profilePhoto}`} 
                                       alt="Profile" 
                                       className="document-image profile-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`)}
+                                      onClick={() => setSelectedImage(`${patient.profilePhoto}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -907,10 +907,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Front:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`} 
+                                      src={`${patient.nidFrontImage}`} 
                                       alt="NID Front" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`)}
+                                      onClick={() => setSelectedImage(`${patient.nidFrontImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -920,10 +920,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Back:</strong></p>
                                     <img 
-                                      src={`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`} 
+                                      src={`${patient.nidBackImage}`} 
                                       alt="NID Back" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`)}
+                                      onClick={() => setSelectedImage(`${patient.nidBackImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -1013,10 +1013,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Operating License:</strong></p>
                                   <img
-                                    src={`${API_BASE_URL}/proxy-image/${hospital.operatingLicensePath}`}
+                                    src={`${hospital.operatingLicensePath}`}
                                     alt="Operating License"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.operatingLicensePath}`)}
+                                    onClick={() => setSelectedImage(`${hospital.operatingLicensePath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>
@@ -1025,10 +1025,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Company Reg. Certificate:</strong></p>
                                   <img
-                                    src={`${API_BASE_URL}/proxy-image/${hospital.companyRegCertPath}`}
+                                    src={`${hospital.companyRegCertPath}`}
                                     alt="Company Reg Certificate"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.companyRegCertPath}`)}
+                                    onClick={() => setSelectedImage(`${hospital.companyRegCertPath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>
@@ -1037,10 +1037,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Tax Clearance:</strong></p>
                                   <img
-                                    src={`${API_BASE_URL}/proxy-image/${hospital.taxClearancePath}`}
+                                    src={`${hospital.taxClearancePath}`}
                                     alt="Tax Clearance"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.taxClearancePath}`)}
+                                    onClick={() => setSelectedImage(`${hospital.taxClearancePath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>
