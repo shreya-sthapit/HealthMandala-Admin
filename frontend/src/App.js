@@ -13,7 +13,7 @@ function App() {
     const token = localStorage.getItem('adminToken');
     if (token) {
       // Verify token with backend
-      fetch('http://localhost:9000/api/admin/verify', {
+      fetch('process.env.REACT_APP_API_URL/api/admin/verify', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
