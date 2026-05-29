@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL, apiUrl } from '../config';
 import './AdminDashboard.css';
 
 const AdminDashboard = ({ admin, onLogout }) => {
@@ -30,52 +31,52 @@ const AdminDashboard = ({ admin, onLogout }) => {
       };
 
       // Fetch statistics
-      const statsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/stats', { headers });
+      const statsResponse = await fetch(apiUrl('/api/admin/stats'), { headers });
       const statsData = await statsResponse.json();
       setStats(statsData);
 
       // Fetch recent activities
-      const activitiesResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/recent-activities', { headers });
+      const activitiesResponse = await fetch(apiUrl('/api/admin/recent-activities'), { headers });
       const activitiesData = await activitiesResponse.json();
       setRecentActivities(activitiesData);
 
       // Fetch pending appointments
-      const pendingAppointmentsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/pending-appointments', { headers });
+      const pendingAppointmentsResponse = await fetch(apiUrl('/api/admin/pending-appointments'), { headers });
       const pendingAppointmentsData = await pendingAppointmentsResponse.json();
       setPendingAppointments(pendingAppointmentsData);
 
       // Fetch approved appointments
-      const approvedAppointmentsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/approved-appointments', { headers });
+      const approvedAppointmentsResponse = await fetch(apiUrl('/api/admin/approved-appointments'), { headers });
       const approvedAppointmentsData = await approvedAppointmentsResponse.json();
       setApprovedAppointments(approvedAppointmentsData);
 
       // Fetch pending doctors
-      const doctorsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/pending-doctors', { headers });
+      const doctorsResponse = await fetch(apiUrl('/api/admin/pending-doctors'), { headers });
       const doctorsData = await doctorsResponse.json();
       setPendingDoctors(doctorsData);
 
       // Fetch pending patients
-      const patientsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/pending-patients', { headers });
+      const patientsResponse = await fetch(apiUrl('/api/admin/pending-patients'), { headers });
       const patientsData = await patientsResponse.json();
       setPendingPatients(patientsData);
 
       // Fetch approved doctors
-      const approvedDoctorsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/approved-doctors', { headers });
+      const approvedDoctorsResponse = await fetch(apiUrl('/api/admin/approved-doctors'), { headers });
       const approvedDoctorsData = await approvedDoctorsResponse.json();
       setApprovedDoctors(approvedDoctorsData);
 
       // Fetch approved patients
-      const approvedPatientsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/approved-patients', { headers });
+      const approvedPatientsResponse = await fetch(apiUrl('/api/admin/approved-patients'), { headers });
       const approvedPatientsData = await approvedPatientsResponse.json();
       setApprovedPatients(approvedPatientsData);
 
       // Fetch pending hospitals
-      const pendingHospitalsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/pending-hospitals', { headers });
+      const pendingHospitalsResponse = await fetch(apiUrl('/api/admin/pending-hospitals'), { headers });
       const pendingHospitalsData = await pendingHospitalsResponse.json();
       setPendingHospitals(Array.isArray(pendingHospitalsData) ? pendingHospitalsData : []);
 
       // Fetch approved hospitals
-      const approvedHospitalsResponse = await fetch('process.env.REACT_APP_API_URL/api/admin/approved-hospitals', { headers });
+      const approvedHospitalsResponse = await fetch(apiUrl('/api/admin/approved-hospitals'), { headers });
       const approvedHospitalsData = await approvedHospitalsResponse.json();
       setApprovedHospitals(Array.isArray(approvedHospitalsData) ? approvedHospitalsData : []);
 
@@ -105,10 +106,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
       }
       
       const endpoint = type === 'appointment' 
-        ? `process.env.REACT_APP_API_URL/api/admin/appointment/${id}/status`
+        ? apiUrl(`/api/admin/appointment/${id}/status`)
         : type === 'hospital'
-        ? `process.env.REACT_APP_API_URL/api/admin/hospital/${id}/approval`
-        : `process.env.REACT_APP_API_URL/api/admin/${type}/${id}/approval`;
+        ? apiUrl(`/api/admin/hospital/${id}/approval`)
+        : apiUrl(`/api/admin/${type}/${id}/approval`);
       
       const body = type === 'appointment' 
         ? { status: approved ? 'approved' : 'rejected' }
@@ -431,10 +432,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Profile Photo:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.profilePhoto}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`} 
                                   alt="Profile" 
                                   className="document-image profile-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.profilePhoto}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -444,10 +445,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NMC Certificate:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nmcCertificateImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`} 
                                   alt="NMC Certificate" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nmcCertificateImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -457,10 +458,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Degree Certificate:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.degreeCertificateImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`} 
                                   alt="Degree Certificate" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.degreeCertificateImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -470,10 +471,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Front:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidFrontImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`} 
                                   alt="NID Front" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidFrontImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -483,10 +484,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Back:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidBackImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`} 
                                   alt="NID Back" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidBackImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -604,10 +605,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Profile Photo:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.profilePhoto}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`} 
                                       alt="Profile" 
                                       className="document-image profile-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.profilePhoto}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.profilePhoto}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -617,10 +618,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NMC Certificate:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nmcCertificateImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`} 
                                       alt="NMC Certificate" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nmcCertificateImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nmcCertificateImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -630,10 +631,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Degree Certificate:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.degreeCertificateImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`} 
                                       alt="Degree Certificate" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.degreeCertificateImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.degreeCertificateImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -643,10 +644,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Front:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidFrontImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`} 
                                       alt="NID Front" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidFrontImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidFrontImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -656,10 +657,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Back:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidBackImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`} 
                                       alt="NID Back" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${doctor.nidBackImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${doctor.nidBackImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -763,10 +764,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>Profile Photo:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${patient.profilePhoto}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`} 
                                   alt="Profile" 
                                   className="document-image profile-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.profilePhoto}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -776,10 +777,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Front:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${patient.nidFrontImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`} 
                                   alt="NID Front" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.nidFrontImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -789,10 +790,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                               <div className="document-item">
                                 <p><strong>NID Back:</strong></p>
                                 <img 
-                                  src={`process.env.REACT_APP_API_URL/proxy-image/${patient.nidBackImage}`} 
+                                  src={`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`} 
                                   alt="NID Back" 
                                   className="document-image"
-                                  onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.nidBackImage}`)}
+                                  onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`)}
                                   onError={(e) => {e.target.style.display = 'none'}}
                                 />
                               </div>
@@ -893,10 +894,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>Profile Photo:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${patient.profilePhoto}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`} 
                                       alt="Profile" 
                                       className="document-image profile-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.profilePhoto}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.profilePhoto}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -906,10 +907,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Front:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${patient.nidFrontImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`} 
                                       alt="NID Front" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.nidFrontImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidFrontImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -919,10 +920,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                   <div className="document-item">
                                     <p><strong>NID Back:</strong></p>
                                     <img 
-                                      src={`process.env.REACT_APP_API_URL/proxy-image/${patient.nidBackImage}`} 
+                                      src={`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`} 
                                       alt="NID Back" 
                                       className="document-image"
-                                      onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${patient.nidBackImage}`)}
+                                      onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${patient.nidBackImage}`)}
                                       onError={(e) => {e.target.style.display = 'none'}}
                                     />
                                   </div>
@@ -1012,10 +1013,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Operating License:</strong></p>
                                   <img
-                                    src={`process.env.REACT_APP_API_URL/proxy-image/${hospital.operatingLicensePath}`}
+                                    src={`${API_BASE_URL}/proxy-image/${hospital.operatingLicensePath}`}
                                     alt="Operating License"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${hospital.operatingLicensePath}`)}
+                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.operatingLicensePath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>
@@ -1024,10 +1025,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Company Reg. Certificate:</strong></p>
                                   <img
-                                    src={`process.env.REACT_APP_API_URL/proxy-image/${hospital.companyRegCertPath}`}
+                                    src={`${API_BASE_URL}/proxy-image/${hospital.companyRegCertPath}`}
                                     alt="Company Reg Certificate"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${hospital.companyRegCertPath}`)}
+                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.companyRegCertPath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>
@@ -1036,10 +1037,10 @@ const AdminDashboard = ({ admin, onLogout }) => {
                                 <div className="document-item">
                                   <p><strong>Tax Clearance:</strong></p>
                                   <img
-                                    src={`process.env.REACT_APP_API_URL/proxy-image/${hospital.taxClearancePath}`}
+                                    src={`${API_BASE_URL}/proxy-image/${hospital.taxClearancePath}`}
                                     alt="Tax Clearance"
                                     className="document-image"
-                                    onClick={() => setSelectedImage(`process.env.REACT_APP_API_URL/proxy-image/${hospital.taxClearancePath}`)}
+                                    onClick={() => setSelectedImage(`${API_BASE_URL}/proxy-image/${hospital.taxClearancePath}`)}
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                   />
                                 </div>

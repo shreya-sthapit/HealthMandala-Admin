@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import { apiUrl } from './config';
 import './App.css';
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
     const token = localStorage.getItem('adminToken');
     if (token) {
       // Verify token with backend
-      fetch('process.env.REACT_APP_API_URL/api/admin/verify', {
+      fetch(apiUrl('/api/admin/verify'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

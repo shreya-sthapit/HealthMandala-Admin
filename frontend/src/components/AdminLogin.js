@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiUrl } from '../config';
 import './AdminLogin.css';
 
 const AdminLogin = ({ onLogin }) => {
@@ -23,7 +24,7 @@ const AdminLogin = ({ onLogin }) => {
     setError('');
 
     try {
-      const response = await fetch('process.env.REACT_APP_API_URL/api/admin/login', {
+      const response = await fetch(apiUrl('/api/admin/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -68,6 +68,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'Reema$TH@PIT00000';
 // CORS configuration
 const corsOptions = {
   origin: [
+    process.env.FRONTEND_URL,
     'http://localhost:3000', 
     'http://localhost:3001', 
     'http://localhost:5000',
@@ -77,8 +78,9 @@ const corsOptions = {
     'http://10.21.10.248:3000',
     'http://10.21.10.248:3001',
     /^http:\/\/10\.\d+\.\d+\.\d+:\d+$/,  // Allow any 10.x.x.x IP with any port
-    /^http:\/\/192\.168\.\d+\.\d+:\d+$/  // Allow any 192.168.x.x IP with any port
-  ],
+    /^http:\/\/192\.168\.\d+\.\d+:\d+$/,  // Allow any 192.168.x.x IP with any port
+    /^https:\/\/.*\.vercel\.app$/
+  ].filter(Boolean),
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -1014,17 +1016,17 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
-// Start server with dynamic port finding
+// Start server with the deployment-provided port, falling back to a local port.
 async function startServer() {
   try {
-    const PORT = await findAvailablePort(9000);
+    const PORT = process.env.PORT || await findAvailablePort(9000);
     
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`MongoDB URI: ${process.env.MONGODB_URI ? 'Connected to Atlas' : 'Using local MongoDB'}`);
       console.log(`\n📊 Admin Dashboard Backend Ready!`);
-      console.log(`🔗 API Base URL: http://localhost:${PORT}`);
+      console.log(`🔗 API Base URL: ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}`);
       console.log(`🔐 Admin Login: admin@gmail.com / admin123`);
       console.log(`\n⚠️  IMPORTANT: Update your frontend to use port ${PORT}`);
       console.log(`\n🔧 To update frontend, run these commands:`);
